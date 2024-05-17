@@ -1,3 +1,5 @@
+import TableProducts from "@/components/TableProducts";
+import { ChakraProvider } from "@chakra-ui/react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -8,13 +10,8 @@ export default async function Products() {
   }
 
   return (
-    <div>
-      <div>
-        Olá, {session?.user?.name}
-      </div>
-      <div>
-        Olá, {session?.user?.email}
-      </div>
-    </div>
+    <ChakraProvider>
+      <TableProducts label="teste" />
+    </ChakraProvider>
   );
 }
