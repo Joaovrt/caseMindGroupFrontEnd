@@ -23,7 +23,7 @@ export default function LoginCard() {
       email:formData.get('email'),
       password:formData.get('password')
     }
-    signIn("credentials",{...data,callbackUrl:"/"})
+    signIn("credentials",{...data,callbackUrl:"/products/all"})
   }
 
   return (

@@ -62,7 +62,7 @@ export default function Navbar() {
           _hover={{
             textDecoration: 'none'
           }}
-          href={'/'}>
+          href={'/products/all'}>
             <Text
               textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
               fontFamily={'heading'}
@@ -257,10 +257,10 @@ interface NavItem {
 const NAV_ITEMS: Array<NavItem> = [
   {
     label: 'Produtos',
-    href: '/',
+    href: '/products/all',
   },
   {
     label: 'Usuários',
-    href: '#',
+    href: '/products/all',
   },
 ];

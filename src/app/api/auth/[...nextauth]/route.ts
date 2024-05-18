@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 const handler = NextAuth({
   pages: {
-    signIn: "/",
+    signIn: "/login",
   },
   providers: [
     CredentialsProvider({

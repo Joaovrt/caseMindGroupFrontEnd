@@ -13,7 +13,6 @@ import {
     Button,
     Link // Importe o componente Box
 } from '@chakra-ui/react';
-import { redirect } from "next/navigation";
 
 interface TableProductsProps {
     label: string;
@@ -51,14 +50,14 @@ export default function TableProducts({ label, products }: TableProductsProps) {
                                 _hover={{
                                     textDecoration: 'none'
                                 }}
-                                href={`/product/${product.id}`}>
+                                href={`/products/product/${product.id}`}>
                                     <Button marginRight={2} colorScheme='blue'>Detalhes</Button>
                                 </Link>
                                 <Link
                                 _hover={{
                                     textDecoration: 'none'
                                 }}
-                                href={`/product/edit/${product.id}`}>
+                                href={`/products/product/edit/${product.id}`}>
                                     <Button marginRight={2} colorScheme='green'>Editar</Button>
                                 </Link>
                                     <Button colorScheme='red'>Deletar</Button>
