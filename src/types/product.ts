@@ -5,5 +5,8 @@ export interface Product {
     value: number;
     minimum_value: number;
     quantity: number;
-    image: string | null;
+    image: {
+      type:string,
+      data:number[]
+    } | null;
   }

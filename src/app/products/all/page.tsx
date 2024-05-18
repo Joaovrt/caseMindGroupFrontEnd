@@ -1,7 +1,7 @@
 import LinkButton from "@/components/LinkButton";
 import TableProducts from "@/components/TableProducts";
 import { getProducts } from "@/libs/fetch/getProducts";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Box } from "@chakra-ui/react"; // Import Box
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -11,12 +11,18 @@ export default async function Products() {
     redirect("/login");
   }
   const data = await getProducts();
-  if(data==0){
-    redirect("/login")
+  if (data == 0) {
+    redirect("/login");
   }
   return (
     <ChakraProvider>
-      <LinkButton color="green" label="Cadastrar Produto" link="/products/register"></LinkButton>
+      <Box textAlign="right" mt={4} mr={4}>
+        <LinkButton 
+          color="green" 
+          label="Cadastrar Produto" 
+          link="/products/register"
+        />
+      </Box>
       <TableProducts label="Produtos" products={data}/>
     </ChakraProvider>
   );

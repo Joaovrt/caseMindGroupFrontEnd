@@ -56,7 +56,7 @@ export default function TableProducts({ label, products }: TableProductsProps) {
                         <Th isNumeric>Preço (R$)</Th>
                         <Th isNumeric>Estoque Mínimo</Th>
                         <Th isNumeric>Quantidade</Th>
-                        <Th isNumeric>Ações</Th> {/* Adicionei uma nova coluna para os botões */}
+                        <Th isNumeric>Ações</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -66,7 +66,7 @@ export default function TableProducts({ label, products }: TableProductsProps) {
                             <Td>{product.name}</Td>
                             <Td isNumeric>{product.value}</Td>
                             <Td isNumeric>{product.minimum_value}</Td>
-                            <Td isNumeric color={product.quantity <= product.minimum_value ? "red.500" : product.quantity <= product.minimum_value + 5 ? "orange.500" : "green.500"}>
+                            <Td isNumeric color={product.quantity <= product.minimum_value ? "red" : product.quantity <= product.minimum_value + 5 ? "orange" : "green"}>
                                 {product.quantity}
                             </Td>
                             <Td isNumeric>
@@ -81,10 +81,17 @@ export default function TableProducts({ label, products }: TableProductsProps) {
                                 _hover={{
                                     textDecoration: 'none'
                                 }}
-                                href={`/products/product/edit/${product.id}`}>
+                                href={`/products/edit/${product.id}`}>
                                     <Button marginRight={2} colorScheme='green'>Editar</Button>
                                 </Link>
                                     <Button colorScheme='red' onClick={()=>deleteProduct(product.id)}>Deletar</Button>
+                                <Link
+                                _hover={{
+                                    textDecoration: 'none'
+                                }}
+                                href={`/products/movement/${product.id}`}>
+                                    <Button marginLeft={2} colorScheme='yellow'>Movimentação</Button>
+                                </Link>
                             </Td>
                         </Tr>
                     ))}
