@@ -1,3 +1,4 @@
+import LinkButton from "@/components/LinkButton";
 import TableProducts from "@/components/TableProducts";
 import { getProducts } from "@/libs/fetch/getProducts";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -15,6 +16,7 @@ export default async function Products() {
   }
   return (
     <ChakraProvider>
+      <LinkButton color="green" label="Cadastrar Produto" link="/products/register"></LinkButton>
       <TableProducts label="Produtos" products={data}/>
     </ChakraProvider>
   );

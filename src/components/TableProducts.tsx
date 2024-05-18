@@ -13,6 +13,7 @@ import {
     Button,
     Link // Importe o componente Box
 } from '@chakra-ui/react';
+import { getCookie } from 'cookies-next';
 
 interface TableProductsProps {
     label: string;
@@ -20,7 +21,30 @@ interface TableProductsProps {
 }
 
 export default function TableProducts({ label, products }: TableProductsProps) {
-
+    async function deleteProduct(productId: number) {
+        try {
+            const token = getCookie('access_token');
+            if (!token) {
+                throw new Error('Token de autenticação não encontrado.');
+            }
+    
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error('Erro ao excluir produto');
+            }
+    
+            // Redirecionar após a exclusão bem-sucedida
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Erro ao excluir produto:', error);
+        }
+    }
     return (
         <TableContainer>
             <Table variant='striped'>
@@ -60,7 +84,7 @@ export default function TableProducts({ label, products }: TableProductsProps) {
                                 href={`/products/product/edit/${product.id}`}>
                                     <Button marginRight={2} colorScheme='green'>Editar</Button>
                                 </Link>
-                                    <Button colorScheme='red'>Deletar</Button>
+                                    <Button colorScheme='red' onClick={()=>deleteProduct(product.id)}>Deletar</Button>
                             </Td>
                         </Tr>
                     ))}
