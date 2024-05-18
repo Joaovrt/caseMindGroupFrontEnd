@@ -7,11 +7,9 @@ export default function ProductsLayout({
     children: React.ReactNode;
   }>) {
     return (
-      <div lang="en">
-        <ChakraProvider>
-            <Navbar/>
-            {children}
-        </ChakraProvider>
-      </div>
+      <ChakraProvider>
+        <Navbar/>
+        {children}
+      </ChakraProvider>
     );
   }

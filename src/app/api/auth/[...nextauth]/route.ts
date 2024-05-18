@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { cookies } from "next/headers";
 
 const handler = NextAuth({
   pages: {
@@ -22,6 +23,7 @@ const handler = NextAuth({
         if (res.status !== 200) return null;
         const user = await res.json();
         if (!user.token) return null;
+        cookies().set("access_token", user.token);          
         if (res.ok && user) {
           return user
         }
