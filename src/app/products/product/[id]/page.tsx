@@ -28,7 +28,7 @@ export default async function Product(context: any) {
           <ProductCard product={data} />
         </Box>
         <Box flex="1" p="4">
-          <TableMovements label="Movimentações" movements={movements} />
+          <TableMovements label="Movimentações do Produto" movements={movements} />
         </Box>
       </Flex>
     </ChakraProvider>

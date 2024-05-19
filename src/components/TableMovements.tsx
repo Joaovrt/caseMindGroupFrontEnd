@@ -25,6 +25,7 @@ export default function TableMovements({ label, movements }: TableMovementsProps
                 <Thead>
                     <Tr>
                         <Th isNumeric>Id</Th>
+                        <Th>Produto</Th>
                         <Th>Usuário</Th>
                         <Th>Tipo</Th>
                         <Th>Data</Th>
@@ -36,7 +37,8 @@ export default function TableMovements({ label, movements }: TableMovementsProps
                     {movements.map(movement => (
                         <Tr key={movement.id}>
                             <Td isNumeric>{movement.id}</Td>
-                            <Td isNumeric>{movement.user.name}</Td>
+                            <Td>{movement.product.name}</Td>
+                            <Td>{movement.user.name}</Td>
                             <Td>
                                 {movement.type}{" "}
                                 {movement.type === 'entrada' ? (

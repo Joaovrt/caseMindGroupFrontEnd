@@ -36,7 +36,7 @@ export default function LoginCard() {
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sistema de Estoque</Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
-            Gerencie melhor seus produtos! ✌️
+            Gerencie melhor seus produtos!
           </Text>
         </Stack>
         <Box
@@ -55,7 +55,7 @@ export default function LoginCard() {
               </FormControl>
               <Stack spacing={10}>
                 <Button
-                  type="submit" // Definindo o tipo de botão como "submit"
+                  type="submit"
                   bg={'blue.400'}
                   color={'white'}
                   _hover={{

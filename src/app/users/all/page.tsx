@@ -5,7 +5,7 @@ import { ChakraProvider, Box } from "@chakra-ui/react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default async function Products() {
+export default async function Users() {
   const session = await getServerSession();
   if (!session) {
     redirect("/login");

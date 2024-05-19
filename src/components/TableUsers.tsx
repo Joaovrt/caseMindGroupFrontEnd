@@ -11,7 +11,7 @@ import {
     TableCaption,
     TableContainer,
     Button,
-    Link // Importe o componente Box
+    Link
 } from '@chakra-ui/react';
 import { getCookie } from 'cookies-next';
 
