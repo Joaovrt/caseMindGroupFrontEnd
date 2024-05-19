@@ -39,7 +39,6 @@ export default function TableProducts({ label, products }: TableProductsProps) {
                 throw new Error('Erro ao excluir produto');
             }
     
-            // Redirecionar após a exclusão bem-sucedida
             window.location.href = '/';
         } catch (error) {
             console.error('Erro ao excluir produto:', error);

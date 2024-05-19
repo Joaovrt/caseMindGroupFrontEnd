@@ -261,6 +261,6 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: 'Usuários',
-    href: '/products/all',
+    href: '/users/all',
   },
 ];

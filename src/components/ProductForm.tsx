@@ -5,15 +5,12 @@ import React, { useState, useEffect } from 'react';
 import {
     FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
     Input,
     Flex,
     Box,
     Stack,
     Button,
     Heading,
-    Text,
     Textarea,
     NumberInput,
     NumberInputField,
@@ -24,8 +21,8 @@ import {
 import { getCookie } from 'cookies-next';
 
 interface ProductFormProps {
-    cadastrar:boolean
-    product?:Product
+    cadastrar: boolean;
+    product?: Product;
 }
 
 export default function ProductForm({ cadastrar, product }: ProductFormProps) {
@@ -51,20 +48,26 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
         }
     }, [product]);
 
-    async function submit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>, method: 'POST' | 'PUT') {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        formData.forEach((value, key) => {
-            console.log(key, value);
-        });
+        
+        if (!formData.get('image')) {
+            formData.delete('image');
+        }
+
         try {
             const token = getCookie('access_token');
             if (!token) {
                 throw new Error('Token de autenticação não encontrado.');
             }
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`, {
-                method: 'POST',
+            const url = method === 'POST'
+                ? `${process.env.NEXT_PUBLIC_API_URL}/product`
+                : `${process.env.NEXT_PUBLIC_API_URL}/product/${product?.id}`;
+
+            const response = await fetch(url, {
+                method,
                 body: formData,
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -72,12 +75,12 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
             });
 
             if (!response.ok) {
-                throw new Error('Erro ao cadastrar produto');
+                throw new Error(method === 'POST' ? 'Erro ao cadastrar produto' : 'Erro ao editar produto');
             }
 
             window.location.href = '/';
         } catch (error) {
-            console.error('Erro ao cadastrar produto:', error);
+            console.error(method === 'POST' ? 'Erro ao cadastrar produto:' : 'Erro ao editar produto:', error);
         }
     }
 
@@ -95,7 +98,7 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                     rounded={'lg'}
                     boxShadow={'lg'}
                     p={8}>
-                    <form onSubmit={submit}>
+                    <form onSubmit={(e) => handleSubmit(e, cadastrar ? 'POST' : 'PUT')}>
                         <Stack spacing={4}>
                             <FormControl id="name" isRequired>
                                 <FormLabel>Nome</FormLabel>
@@ -107,7 +110,7 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                             </FormControl>
                             <FormControl id="value" isRequired>
                                 <FormLabel>Valor</FormLabel>
-                                <NumberInput defaultValue={0} min={0} precision={2} name="value" value={formData.value} onChange={(value) => setFormData({ ...formData, value: value })}>
+                                <NumberInput defaultValue={0} min={0} precision={2} name="value" value={formData.value} onChange={(valueString, valueNumber) => setFormData({ ...formData, value: valueNumber })}>
                                     <NumberInputField />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
@@ -117,7 +120,7 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                             </FormControl>
                             <FormControl id="minimum_value" isRequired>
                                 <FormLabel>Quantidade mínima de estoque</FormLabel>
-                                <NumberInput defaultValue={0} min={0} name="minimum_value" value={formData.minimum_value} onChange={(value) => setFormData({ ...formData, minimum_value: value })}>
+                                <NumberInput defaultValue={0} min={0} name="minimum_value" value={formData.minimum_value} onChange={(valueString, valueNumber) => setFormData({ ...formData, minimum_value: valueNumber })}>
                                     <NumberInputField />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
@@ -125,16 +128,18 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                                     </NumberInputStepper>
                                 </NumberInput>
                             </FormControl>
-                            <FormControl id="quantity" isRequired>
-                                <FormLabel>Quantidade</FormLabel>
-                                <NumberInput defaultValue={0} min={0} name="quantity" value={formData.quantity} onChange={(value) => setFormData({ ...formData, quantity: value })}>
-                                    <NumberInputField />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
-                            </FormControl>
+                            {cadastrar && (
+                                <FormControl id="quantity" isRequired>
+                                    <FormLabel>Quantidade</FormLabel>
+                                    <NumberInput defaultValue={0} min={0} name="quantity" value={formData.quantity} onChange={(valueString, valueNumber) => setFormData({ ...formData, quantity: valueNumber })}>
+                                        <NumberInputField />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                </FormControl>
+                            )}
                             <FormControl id="image">
                                 <FormLabel>Imagem</FormLabel>
                                 <Input type="file" name="image" accept=".jpg, .jpeg, .png" onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })} />
@@ -155,5 +160,5 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                 </Box>
             </Stack>
         </Flex>
-    )
+    );
 }
