@@ -17,7 +17,8 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  useToast
+  useToast,
+  CircularProgress,
 } from '@chakra-ui/react';
 import { getCookie } from 'cookies-next';
 
@@ -27,13 +28,16 @@ interface MovementCardProps {
 
 export default function MovementCard({ product }: MovementCardProps) {
   const [movementType, setMovementType] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     const data = {
       type: formData.get('type'),
-      quantity: parseInt(formData.get('quantity') as string, 10)
+      quantity: parseInt(formData.get('quantity') as string, 10),
     };
 
     try {
@@ -46,9 +50,9 @@ export default function MovementCard({ product }: MovementCardProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -63,19 +67,20 @@ export default function MovementCard({ product }: MovementCardProps) {
         status: 'success',
         duration: 5000,
         isClosable: true,
-    });
+      });
 
       window.location.href = '/';
     } catch (error) {
       console.error('Erro ao registrar movimentação de estoque:', error);
       toast({
-        title:'Erro',
+        title: 'Erro',
         description: 'Ocorreu um erro inesperado. Por favor, tente novamente.',
         status: 'error',
         duration: 5000,
         isClosable: true,
-    });
-      
+      });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -124,16 +129,20 @@ export default function MovementCard({ product }: MovementCardProps) {
                   </NumberInputStepper>
                 </NumberInput>
               </FormControl>
-              <Stack spacing={10}>
-                <Button
-                  type="submit"
-                  bg={'blue.400'}
-                  color={'white'}
-                  _hover={{
-                    bg: 'blue.500',
-                  }}>
-                  Registrar
-                </Button>
+              <Stack spacing={10} align={'center'}>
+                {isLoading ? (
+                  <CircularProgress isIndeterminate color='blue.300' />
+                ) : (
+                  <Button
+                    type="submit"
+                    bg={'blue.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'blue.500',
+                    }}>
+                    Registrar
+                  </Button>
+                )}
               </Stack>
             </Stack>
           </form>

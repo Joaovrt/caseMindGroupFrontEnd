@@ -18,6 +18,19 @@ interface TableMovementsProps {
 }
 
 export default function TableMovements({ label, movements }: TableMovementsProps) {
+    const formatDate = (dateString: string) => {
+        const options: Intl.DateTimeFormatOptions = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        };
+        return new Date(dateString).toLocaleString('pt-BR', options);
+    };
+
     return (
         <TableContainer>
             <Table variant='striped'>
@@ -47,7 +60,7 @@ export default function TableMovements({ label, movements }: TableMovementsProps
                                     <ChevronDownIcon color="red" />
                                 )}
                             </Td>
-                            <Td>{movement.date}</Td>
+                            <Td>{formatDate(movement.date)}</Td>
                             <Td isNumeric>{movement.quantity}</Td>
                             <Td isNumeric color={movement.balance <= movement.product.minimum_value ? "red" : movement.balance <= movement.product.minimum_value + 5 ? "orange" : "green"}>
                                 {movement.balance}

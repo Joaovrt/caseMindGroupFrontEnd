@@ -18,6 +18,7 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     useToast,
+    CircularProgress,
 } from '@chakra-ui/react'
 import { getCookie } from 'cookies-next';
 
@@ -33,8 +34,9 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
         value: 0,
         minimum_value: 0,
         quantity: 0,
-        image: null,
+        image: null as File | null,
     });
+    const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
 
     useEffect(() => {
@@ -42,7 +44,7 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
             setFormData({
                 name: product.name || '',
                 description: product.description || '',
-                value: product.value || 0,
+                value: product.value || 0.00,
                 minimum_value: product.minimum_value || 0,
                 quantity: product.quantity || 0,
                 image: null,
@@ -52,6 +54,7 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>, method: 'POST' | 'PUT') {
         e.preventDefault();
+        setIsLoading(true);
         const formData = new FormData(e.currentTarget);
         
         if (!formData.get('image')) {
@@ -117,6 +120,8 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                 duration: 5000,
                 isClosable: true,
             });
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -146,7 +151,7 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                             </FormControl>
                             <FormControl id="value" isRequired>
                                 <FormLabel>Valor</FormLabel>
-                                <NumberInput defaultValue={0} min={0} precision={2} name="value" value={formData.value} onChange={(valueString, valueNumber) => setFormData({ ...formData, value: valueNumber })}>
+                                <NumberInput defaultValue={0} min={0} precision={2} name="value" value={formData.value} onChange={(valueNumber) => setFormData({ ...formData, value: parseFloat(valueNumber) })}>
                                     <NumberInputField />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
@@ -178,18 +183,26 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
                             )}
                             <FormControl id="image">
                                 <FormLabel>Imagem</FormLabel>
-                                <Input type="file" name="image" accept=".jpg, .jpeg, .png" onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })} />
+                                <Input type="file" name="image" accept=".jpg, .jpeg, .png" onChange={(e) => {
+                                    if (e.target.files) {
+                                        setFormData({ ...formData, image: e.target.files[0] });
+                                    }
+                                }} />
                             </FormControl>
-                            <Stack spacing={10}>
-                                <Button
-                                    type="submit"
-                                    bg={'blue.400'}
-                                    color={'white'}
-                                    _hover={{
-                                        bg: 'blue.500',
-                                    }}>
-                                    {cadastrar ? 'Cadastrar' : 'Editar'}
-                                </Button>
+                            <Stack spacing={10} align={'center'}>
+                                {isLoading ? (
+                                    <CircularProgress isIndeterminate color='blue.300' />
+                                ) : (
+                                    <Button
+                                        type="submit"
+                                        bg={'blue.400'}
+                                        color={'white'}
+                                        _hover={{
+                                            bg: 'blue.500',
+                                        }}>
+                                        {cadastrar ? 'Cadastrar' : 'Editar'}
+                                    </Button>
+                                )}
                             </Stack>
                         </Stack>
                     </form>

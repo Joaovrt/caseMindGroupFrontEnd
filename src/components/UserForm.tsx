@@ -13,7 +13,8 @@ import {
     Heading,
     Switch,
     useToast,
-} from '@chakra-ui/react'
+    CircularProgress,
+} from '@chakra-ui/react';
 import { getCookie } from 'cookies-next';
 
 interface UserFormProps {
@@ -29,7 +30,7 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
         confirm_password: '',
         active: true,
     });
-
+    const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
 
     useEffect(() => {
@@ -70,6 +71,7 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
             return;
         }
 
+        setIsLoading(true);
         try {
             const token = getCookie('access_token');
             if (!token) {
@@ -98,10 +100,12 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
                         duration: 5000,
                         isClosable: true,
                     });
-                } 
-                else
+                } else {
                     throw new Error(method === 'POST' ? 'Erro ao cadastrar usuário' : 'Erro ao editar usuário');
+                }
+                return;
             }
+
             toast({
                 title: method === 'POST' ? 'Usuário criado' : 'Usuário atualizado',
                 description: method === 'POST' ? 'O usuário foi criado com sucesso.' : 'O usuário foi atualizado com sucesso.',
@@ -119,6 +123,8 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
                 duration: 9000,
                 isClosable: true,
             });
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -151,16 +157,20 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
                                 <FormLabel>Ativo?</FormLabel>
                                 <Switch id="active" isChecked={formData.active} onChange={(e) => setFormData({ ...formData, active: e.target.checked })} />
                             </FormControl>
-                            <Stack spacing={10}>
-                                <Button
-                                    type="submit"
-                                    bg={'blue.400'}
-                                    color={'white'}
-                                    _hover={{
-                                        bg: 'blue.500',
-                                    }}>
-                                    {cadastrar ? 'Cadastrar' : 'Editar'}
-                                </Button>
+                            <Stack spacing={10} align={'center'}>
+                                {isLoading ? (
+                                    <CircularProgress isIndeterminate color='blue.300' />
+                                ) : (
+                                    <Button
+                                        type="submit"
+                                        bg={'blue.400'}
+                                        color={'white'}
+                                        _hover={{
+                                            bg: 'blue.500',
+                                        }}>
+                                        {cadastrar ? 'Cadastrar' : 'Editar'}
+                                    </Button>
+                                )}
                             </Stack>
                         </Stack>
                     </form>
