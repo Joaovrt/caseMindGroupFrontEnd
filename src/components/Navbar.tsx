@@ -24,7 +24,6 @@ import {
   ChevronRightIcon,
 } from '@chakra-ui/icons';
 import { signOut } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();

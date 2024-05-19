@@ -2,7 +2,6 @@ import { Product } from '@/types/product';
 import {
     Box,
     Center,
-    useColorModeValue,
     Heading,
     Text,
     Stack,
