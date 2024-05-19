@@ -15,7 +15,7 @@ export default async function Product(context: any) {
   const productId = context.params.id;
   const data = await getProductById(productId);
 
-  if (data == 0) {
+  if (data === 0) {
     redirect("/login");
   }
 

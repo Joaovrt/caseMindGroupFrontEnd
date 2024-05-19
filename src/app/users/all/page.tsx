@@ -11,7 +11,7 @@ export default async function Users() {
     redirect("/login");
   }
   const data = await getUsers();
-  if (data == 0) {
+  if (data === 0) {
     redirect("/login");
   }
   return (

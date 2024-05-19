@@ -11,7 +11,7 @@ export default async function Products() {
     redirect("/login");
   }
   const data = await getProducts();
-  if (data == 0) {
+  if (data === 0) {
     redirect("/login");
   }
   return (

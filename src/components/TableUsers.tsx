@@ -47,7 +47,18 @@ export default function TableUsers({ label, users }: TableUsersProps) {
             });
     
             if (!response.ok) {
-                throw new Error('Failed to update user status');
+                if(response.status === 409){
+                    toast({
+                        title: 'Erro ao desativar usuário',
+                        description: 'Não é possível inativar a si mesmo.',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                }
+                else
+                    throw new Error('Failed to update user status');
+                return;
             }
     
             const result = await response.json();

@@ -30,7 +30,7 @@ export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
   async function out(){
     await signOut()
-    redirect("/login")
+    window.location.href = '/login';
   };
   return (
     <Box>

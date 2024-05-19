@@ -48,13 +48,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                             filter: 'blur(20px)',
                         },
                     }}>
+                    {product.image &&
                     <Image
                         rounded={'lg'}
                         height={230}
                         width={282}
                         objectFit={'cover'}
                         src={imageURL}
-                    />
+                    />}
                 </Box>
                 <Stack pt={10} align={'center'}>
                     <Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>

@@ -100,7 +100,17 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
                         duration: 5000,
                         isClosable: true,
                     });
-                } else {
+                } 
+                else if(response.status === 409){
+                    toast({
+                        title: 'Erro ao editar usuário',
+                        description: 'Não é possível inativar a si mesmo.',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                }
+                else {
                     throw new Error(method === 'POST' ? 'Erro ao cadastrar usuário' : 'Erro ao editar usuário');
                 }
                 return;

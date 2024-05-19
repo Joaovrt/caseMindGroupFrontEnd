@@ -13,7 +13,7 @@ export default async function EditUser(context: any) {
     const userId = context.params.id;
     const data = await getUserById(userId);
 
-    if (data == 0) {
+    if (data === 0) {
         redirect("/login");
     }
 

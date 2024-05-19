@@ -13,7 +13,7 @@ export default async function User(context: any) {
   const userId = context.params.id;
   const movements = await getMovementsByUserId(userId);
 
-  if (movements == 0) {
+  if (movements === 0) {
     redirect("/login");
   }
 
