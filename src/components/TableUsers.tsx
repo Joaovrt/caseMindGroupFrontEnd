@@ -28,7 +28,6 @@ export default function TableUsers({ label, users }: TableUsersProps) {
             throw new Error('Token de autenticação não encontrado.');
           }
       
-          // Criar um novo objeto de usuário com o campo "active" invertido
           const updatedUser = { ...user, active: !user.active };
       
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${user.id}`, {

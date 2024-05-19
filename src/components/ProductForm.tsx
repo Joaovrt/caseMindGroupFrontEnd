@@ -17,6 +17,7 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
+    useToast,
 } from '@chakra-ui/react'
 import { getCookie } from 'cookies-next';
 
@@ -34,6 +35,7 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
         quantity: 0,
         image: null,
     });
+    const toast = useToast();
 
     useEffect(() => {
         if (product) {
@@ -75,12 +77,46 @@ export default function ProductForm({ cadastrar, product }: ProductFormProps) {
             });
 
             if (!response.ok) {
-                throw new Error(method === 'POST' ? 'Erro ao cadastrar produto' : 'Erro ao editar produto');
+                if (response.status === 400) {
+                    toast({
+                        title: 'Erro ao criar/editar produto',
+                        description: 'Nome do produto já existe.',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                } else if (response.status === 409) {
+                    toast({
+                        title: 'Erro ao criar/editar produto',
+                        description: 'Descrição do produto já existe.',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                } else {
+                    throw new Error(method === 'POST' ? 'Erro ao cadastrar produto' : 'Erro ao editar produto');
+                }
+                return;
             }
+
+            toast({
+                title: method === 'POST' ? 'Produto criado' : 'Produto atualizado',
+                description: method === 'POST' ? 'O produto foi criado com sucesso.' : 'O produto foi atualizado com sucesso.',
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+            });
 
             window.location.href = '/';
         } catch (error) {
             console.error(method === 'POST' ? 'Erro ao cadastrar produto:' : 'Erro ao editar produto:', error);
+            toast({
+                title: method === 'POST' ? 'Erro ao cadastrar produto' : 'Erro ao editar produto',
+                description: 'Ocorreu um erro inesperado. Por favor, tente novamente.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
         }
     }
 

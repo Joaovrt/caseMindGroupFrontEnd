@@ -11,7 +11,8 @@ import {
     TableCaption,
     TableContainer,
     Button,
-    Link // Importe o componente Box
+    Link,
+    useToast
 } from '@chakra-ui/react';
 import { getCookie } from 'cookies-next';
 
@@ -21,6 +22,7 @@ interface TableProductsProps {
 }
 
 export default function TableProducts({ label, products }: TableProductsProps) {
+    const toast = useToast();
     async function deleteProduct(productId: number) {
         try {
             const token = getCookie('access_token');
@@ -38,10 +40,24 @@ export default function TableProducts({ label, products }: TableProductsProps) {
             if (!response.ok) {
                 throw new Error('Erro ao excluir produto');
             }
+            toast({
+                title: 'Sucesso',
+                description: 'O produto foi deletado com sucesso.',
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+            });
     
             window.location.href = '/';
         } catch (error) {
             console.error('Erro ao excluir produto:', error);
+            toast({
+                title:'Erro',
+                description: 'Ocorreu um erro inesperado. Por favor, tente novamente.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
         }
     }
     return (

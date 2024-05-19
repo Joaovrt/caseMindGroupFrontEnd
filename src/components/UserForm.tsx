@@ -48,7 +48,6 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
         e.preventDefault();
         const { name, email, password, confirm_password, active } = formData;
 
-        // Validar senha e confirmação de senha
         if (password !== confirm_password) {
             toast({
                 title: 'Erro',
@@ -60,7 +59,6 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
             return;
         }
 
-        // Validar se a senha é obrigatória no cadastro
         if (cadastrar && !password) {
             toast({
                 title: 'Erro',
@@ -92,9 +90,25 @@ export default function UserForm({ cadastrar, user }: UserFormProps) {
             });
 
             if (!response.ok) {
-                throw new Error(method === 'POST' ? 'Erro ao cadastrar usuário' : 'Erro ao editar usuário');
+                if (response.status === 400) {
+                    toast({
+                        title: 'Erro ao criar/editar usuário',
+                        description: 'E-mail de usuário já cadastrado.',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                } 
+                else
+                    throw new Error(method === 'POST' ? 'Erro ao cadastrar usuário' : 'Erro ao editar usuário');
             }
-
+            toast({
+                title: method === 'POST' ? 'Usuário criado' : 'Usuário atualizado',
+                description: method === 'POST' ? 'O usuário foi criado com sucesso.' : 'O usuário foi atualizado com sucesso.',
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+            });
             window.location.href = '/users/all';
         } catch (error) {
             console.error(method === 'POST' ? 'Erro ao cadastrar usuário:' : 'Erro ao editar usuário:', error);

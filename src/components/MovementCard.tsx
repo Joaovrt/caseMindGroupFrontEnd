@@ -17,8 +17,9 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  useToast
 } from '@chakra-ui/react';
-import { getCookie } from 'cookies-next'; // Assuming you are using cookies-next to handle cookies
+import { getCookie } from 'cookies-next';
 
 interface MovementCardProps {
   product: Product;
@@ -26,7 +27,7 @@ interface MovementCardProps {
 
 export default function MovementCard({ product }: MovementCardProps) {
   const [movementType, setMovementType] = useState<string | null>(null);
-
+  const toast = useToast();
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -56,10 +57,24 @@ export default function MovementCard({ product }: MovementCardProps) {
 
       const result = await response.json();
       console.log('Movimentação registrada com sucesso:', result);
+      toast({
+        title: 'Sucesso',
+        description: 'Movimentação registrada com sucesso.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+    });
 
       window.location.href = '/';
     } catch (error) {
       console.error('Erro ao registrar movimentação de estoque:', error);
+      toast({
+        title:'Erro',
+        description: 'Ocorreu um erro inesperado. Por favor, tente novamente.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+    });
       
     }
   }

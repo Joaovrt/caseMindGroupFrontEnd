@@ -9,12 +9,29 @@ import {
   Stack,
   Button,
   Heading,
-  Text
+  Text,
+  useToast
 } from '@chakra-ui/react';
 
 import {signIn} from "next-auth/react"
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function LoginCard() {
+  const toast = useToast();
+  const searchParams = useSearchParams()
+  const error = searchParams.get('error')
+
+  useEffect(()=>{
+    if(error=="CredentialsSignin")
+      toast({
+        title:'Erro',
+        description: 'Usuário ou senha inválidos',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+    });
+  },[error])
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

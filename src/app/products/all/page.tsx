@@ -1,7 +1,7 @@
 import LinkButton from "@/components/LinkButton";
 import TableProducts from "@/components/TableProducts";
 import { getProducts } from "@/libs/fetch/getProducts";
-import { ChakraProvider, Box } from "@chakra-ui/react"; // Import Box
+import { ChakraProvider, Box } from "@chakra-ui/react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
